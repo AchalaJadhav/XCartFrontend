@@ -1,0 +1,112 @@
+<!--Show following div if User is logged in -->
+<nav class="navbar navbar-expand-lg bg-dark" *ngIf="!_auth.isAdminAuthenticated()">
+  <a id="home" class="navbar-brand" [routerLink]="['/home']">
+    <img src="../../assets/Icons/X.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
+      CART
+      <!-- <img src="../../assets/Icons/USTLogo-removebg-preview.png" width="30" height="30" class="d-inline-block align-top" alt="">
+      Testverse -->
+  </a>      
+  <span style="color: rgb(157, 161, 154)" class="navbar-text" *ngIf="!_auth.isAnonymousLoggedIn()">
+      Hello {{user}}
+  </span> 
+
+ <span style="color: rgb(157, 161, 154)" class="navbar-text" *ngIf="_auth.isAnonymousLoggedIn()">
+    Hello there,
+</span>
+        
+  <div class="collapse navbar-collapse" id="navbarSupportedContent" style="margin-left: 50px">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Category
+        </a>
+        <div  class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" *ngFor="let item of categories" [routerLink]="['/search/category',item]">{{item}}</a>
+        </div>
+      </li>
+      
+      <li style="margin-left: 340px">
+        <form class="form-inline my-2 my-lg-0" (ngSubmit)="search(f); f.reset()" #f=ngForm>
+          <input class="form-control mr-sm-2" aria-label="Search" type="search" placeholder="Product Name"  name="ProductName" ngModel>
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </li>
+    </ul>
+
+    <div class="nav-item active" *ngIf="!_auth.isAnonymousLoggedIn()">
+      <a class="nav-link" [routerLink]="['/currentOrders']">Track Orders <span class="sr-only">(current)</span></a>
+    </div>
+            
+    <div class="nav-item" *ngIf="!_auth.isAnonymousLoggedIn()">
+      <a class="nav-link" [routerLink]="['/addtocart']">Cart</a>
+    </div>
+    
+    <div class="nav-item active" *ngIf="!_auth.isAnonymousLoggedIn()">
+      <a class="nav-link" [routerLink]="['/orderHistory']">Orders History <span class="sr-only">(current)</span></a>
+    </div>
+    
+    <div class="nav-item" *ngIf="_auth.isAnonymousLoggedIn()">
+      <button class="btn btn-outline-success" type="button" [routerLink]="['/login']" *ngIf="true"  >Login</button>
+    </div>
+    
+    <div class="dropdown" *ngIf="!_auth.isAnonymousLoggedIn()">
+      <a  class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <!-- Hello, {{user}} --> 
+        Account
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">      
+        <a class="dropdown-item" [routerLink]="['/profile']">Profile</a>
+        <a class="dropdown-item" [routerLink]="['/address']">Address</a>
+        <a class="dropdown-item" (click)="downloadFile()">Get Faq</a>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item" (click) = "logout()">Logout</button>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+<!--Show following div if User is logged in -->
+<nav class="navbar navbar-expand-lg  bg-dark" *ngIf="_auth.isAdminAuthenticated() && !_auth.isAnonymousLoggedIn()">
+  <a class="navbar-brand" [routerLink]="['/adminProducts']">
+    <img src="../../assets/Icons/X.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
+      CART
+      <!-- <img src="../../assets/Icons/USTLogo-removebg-preview.png" width="30" height="30" class="d-inline-block align-top" alt="">
+      Testverse  -->
+  </a>     
+  
+  <span style="color: rgb(157, 161, 154)" class="navbar-text">
+    Admin
+  </span>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent" style="margin-left: 50px">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Orders
+        </a>
+        <div  class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" [routerLink]="['/corders']">Current Orders</a>
+          <a class="dropdown-item" [routerLink]="['/dorders']">Delivered Orders</a> 
+        </div>
+      </li>
+      
+      <li style="margin-left: 340px">
+        <form class="form-inline my-2 my-lg-0" (ngSubmit)="search(f);f.reset()" #f=ngForm>
+          <input class="form-control mr-sm-2" aria-label="Search" type="search" placeholder="Product Name"  name="ProductName" ngModel>
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </li>
+    </ul>
+    
+    <div class="nav-item" *ngIf="!_auth.isAnonymousLoggedIn()">
+      <a class="nav-link" [routerLink]="['/deactivelist']">Deactive Products</a>
+    </div>
+    <div class="nav-item" *ngIf="!_auth.isAnonymousLoggedIn()">
+      <button class="btn btn-outline-success" type="button" (click) = "logout()">Logout</button>
+    </div>
+  </div>
+
+</nav>
+
+
