@@ -1,17 +1,9 @@
-<h2>Testverse HomePage</h2>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<!-- 
-<h2>
-    <button (click)=welcomeHome() name="welcome">Welcome</button>
-    <h2></h2>
+<div class="product-container" *ngIf="!loading; else loadingSpinner">
+  <app-product *ngFor="let product of products" [product]="product"></app-product>
+</div>
 
-</h2>
-
-<br>
-<span>
-    <ul>
-        <li><a routerLink="/" >Home</a></li>
-        <li><a routerLink="/login" >Login</a></li>
-        <li><a routerLink="/signup" >SignUp</a></li>
-    </ul>
-</span> -->
+<ng-template #loadingSpinner>
+  <div class="spinner">
+    <p>Loading products...</p>
+  </div>
+</ng-template>

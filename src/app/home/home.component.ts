@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { WelcomeService } from '../service/welcome.service';
+import { Product } from '../product/product.model';
+import { AuthService } from '../services/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -8,22 +10,25 @@ import { WelcomeService } from '../service/welcome.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private serviceWelcome:WelcomeService) { }
+  products: Product[] = []; // Array to hold products
+  loading: boolean = true; // Loading state
+
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-  }
-  samp:any = "empty response"
-
-  welcomeHome()
-  {
-    this.samp = this.serviceWelcome.executeWelcome().subscribe();
-    console.log("Loginfuc :"+this.samp );
-    this.serviceWelcome.executeWelcome().subscribe(
-      response => this.handleSuccessRes(response)
-    );
-  }
-  handleSuccessRes(response:any)
-  {
-    console.log(response)
+    this.authService.getProducts().subscribe({
+      next: (data: Product[]) => {
+        // Assuming data has the path as a relative URL
+        this.products = data.map(product => ({
+          ...product,
+          fullImagePath: environment.imageBasePath + product.path // Combine base path with image path
+        }));
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error fetching products:', error);
+        this.loading = false;
+      }
+    });
   }
 }

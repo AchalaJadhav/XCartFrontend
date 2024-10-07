@@ -1,0 +1,10 @@
+<div class="product-card">
+  <img [src]="productImagePath" alt="{{ product.productName }}" class="product-image" />
+  <h3 class="product-name">{{ product.productName }}</h3>
+  <p class="product-price">Rs. {{ product.price.toFixed(2) }}</p>
+  <p class="product-discount">Discount: {{ product.productDiscount }}%</p>
+  <div class="button-container">
+    <button class="add-to-cart-btn" (click)="addToCart()">Add to Cart</button>
+    <button class="buy-now-btn" (click)="buyNow()">Buy Now</button>
+  </div>  
+</div>

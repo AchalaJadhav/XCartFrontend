@@ -7,68 +7,40 @@
         <div class="col-md-4 col-sm-4 col-xs-12"></div>
         
         <div class="col-md-4 col-sm-4 col-xs-12">
-            <div style="text-align: center"><img style="width: 387px" class="img-responsive"  src="../../assets/Icons/X.jpg"></div>
+            <div style="text-align: center"><img style="width: 187px" class="img-responsive"  src="../../assets/Icons/X.jpg"></div>
 
-            <form (ngSubmit)="login()" #f=ngForm *ngIf = "false">            
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" class="form-control" placeholder="Email"  name="EmailId" ngModel>
-                </div>
-                
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" class="form-control" placeholder="Password" name="Password" ngModel>
-                </div>
-               
-            <div class="container-fluid">
-                <div class="row">
-                <div  class="form-check" >
-                    <input class="form-check-input" style="position: absolute; margin-top: 9.3px; margin-left: -15.25px;" type="checkbox" value="" id="rememberMe" checked />
-                    <label class="form-check-label" style="cursor: pointer;" for="rememberMe"> Remember me </label>
-                </div>
-                <div >
-                    <label class="form-check-label" style="margin-left: 171px; cursor: pointer;"  [routerLink]="['/forgetPassword']">Forgot Password?</label>
+            <div class="login-container">
+            <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+                <h2>Welcome to XCart!</h2>
+
+                <div>
+                <label for="username">Username</label>
+                <input id="username" formControlName="username" required />
+                <div *ngIf="loginForm.get('username')?.invalid && (loginForm.get('username')?.touched || loginForm.get('username')?.dirty)">
+                    <small *ngIf="loginForm.get('username')?.errors?.['required']">Username is required.</small>
+                    <small *ngIf="loginForm.get('username')?.errors?.['email']">Please enter a valid email.</small>
                 </div>
                 </div>
+
+                <div>
+                <label for="password">Password</label>
+                <input id="password" type="password" formControlName="password" required />
+                <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)">
+                    <small *ngIf="loginForm.get('password')?.errors?.['required']">Password is required.</small>
+                </div>
+                </div>
+
+                <button type="submit" [disabled]="loading">
+                <div *ngIf="loading" class="spinner"></div>
+                Login
+                </button>
+
+                <div class="signup-link">
+                <p>Don't have an account? <a routerLink="/signup">Sign Up</a></p>
+                </div>
+            </form>
             </div>
-                <button type="submit" class="btn btn-success btn-block">Login</button>
-                <button type="button" [routerLink]="['/signup']" class="btn btn-secondary btn-block">New to XCart? Create an account</button>        
-            </form>
 
-            <form name="form" #f="ngForm" (ngSubmit)="f.form.valid && login()" >
-      
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="username" class="form-control" name="username" [(ngModel)]="form.username" email required #username="ngModel" [ngClass]="{ 'is-invalid': f.submitted && username.errors }"/>
-                    <div *ngIf="f.submitted && username.errors" class="invalid-feedback">
-                      <div *ngIf="username.errors['required']">Email is required</div>
-                      <div *ngIf="username.errors['email']">Email is invalid</div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" class="form-control" name="password" [(ngModel)]="form.password" required minlength="6" maxlength="40" #password="ngModel" [ngClass]="{ 'is-invalid': f.submitted && password.errors }"/>
-                    <div *ngIf="f.submitted && password.errors" class="invalid-feedback">
-                      <div *ngIf="password.errors['required']">Password is required</div>
-                    </div>
-                  </div>   
-                
-                <div class="container-fluid">
-                    <div class="row">
-                    <div  class="form-check" >
-                        <input class="form-check-input" style="position: absolute; margin-top: 9.3px; margin-left: -15.25px;" type="checkbox" value="" id="rememberMe" checked />
-                        <label class="form-check-label" style="cursor: pointer;" for="rememberMe"> Remember me </label>
-                    </div>
-                    <div >
-                        <label class="form-check-label" style="margin-left: 171px; cursor: pointer;"  [routerLink]="['/forgetPassword']">Forgot Password?</label>
-                    </div>
-                    </div>
-                </div>
-              <div class="form-group">
-                <button class="inputline" type="submit" class="btn btn-success btn-block">Login</button>
-                <button type="button" [routerLink]="['/signup']" class="btn btn-secondary btn-block">New to XCart? Create an account</button> 
-              </div>
-            </form>
 
         </div>
     
