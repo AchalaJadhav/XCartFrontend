@@ -1,8 +1,44 @@
-.product-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 50px;
-  padding: 20px; /* Optional: Add some padding around the container */
-  margin: 20px; /* Adjust margin to suit your layout */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns */
+  gap: 16px; /* Adjust the spacing between the cards */
+  padding: 16px; /* Add some padding around the grid */
+
 }
+
+.product-card {
+  /* Add any specific styles for product cards if needed */
+}
+
+@media (max-width: 1200px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for large screens */
+  }
+}
+
+@media (max-width: 900px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for medium screens */
+  }
+}
+
+@media (max-width: 600px) {
+  .product-grid {
+    grid-template-columns: 1fr; /* 1 column for small screens */
+  }
+}
+
+
+.example-card {
+  max-width: 400px;
+  display: inline-block;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease; /* Smooth transition for the shadow effect */
+}
+
+/* Hover effect */
+.example-card:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Adjust values for shadow */
+}
+
+

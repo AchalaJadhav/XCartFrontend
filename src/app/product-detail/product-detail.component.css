@@ -1,0 +1,89 @@
+.left-image-vew{
+    display: inline-block;
+    width: max-content;
+    height: max-content;
+    padding: 5%;
+    margin-left: 3%;
+}
+
+.left-image-vew img{
+    width: 140%;
+    height: 100%;
+    margin-top: -45%;
+}
+
+.right-info-vew{
+    display: inline-block;
+    margin-left: 7%;
+    padding-top: 5%;
+}
+
+.rating-star{
+    background-color: green;
+    width: max-content;
+    display: inline;
+    padding-left: 1%;
+    border-radius: 10px;
+}
+
+.special-price{
+    margin-top: 2%;
+    font-size: 14px;
+    color: green;
+    margin-bottom: 1%;
+}
+
+.product-price{
+    display: inline-block;
+    font-size: x-large;
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+.product-discount{
+    display: inline-block;
+    color: green;
+    font-weight: 500;
+    font-size: medium;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: gray;
+    margin-left: 8px;
+    margin-right: 5px;
+    font-size: medium;
+}
+  
+.add-to-cart{
+    border: none;
+    background-color: orange;
+    color: white;
+    vertical-align: middle;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.add-to-cart mat-icon{
+    font-size: larger;
+    display: inline;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.buy-now{
+    border: none;
+    background-color: orange;
+    color: white;
+    vertical-align: middle;
+    padding: 8px;
+    border-radius: 5px;
+    margin-left: 8px;
+}
+
+.buy-now mat-icon{
+    font-size: larger;
+    display: inline;
+    vertical-align: middle;
+    margin-right: 5px;
+}

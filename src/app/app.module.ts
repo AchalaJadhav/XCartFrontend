@@ -14,8 +14,17 @@ import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
-import { ProductComponent } from './product/product.component';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { JwtModule } from '@auth0/angular-jwt';
+import { MatCardModule } from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+import {MatIconModule} from '@angular/material/icon';
+import { ProductCartComponent } from './product-cart/product-cart.component';
 
+export function tokenGetter() {
+  return localStorage.getItem('token'); // Adjust this if you're using a different storage method
+}
 
 @NgModule({
   declarations: [
@@ -26,7 +35,8 @@ import { ProductComponent } from './product/product.component';
     HeaderComponent,
     SignUpComponent,
     SpinnerComponent,
-    ProductComponent
+    ProductDetailComponent,
+    ProductCartComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +45,18 @@ import { ProductComponent } from './product/product.component';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,  // Required for Toastr
-    ToastrModule.forRoot()  // Toastr configuration
+    ToastrModule.forRoot(),  // Toastr configuration
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ['localhost:8182'], // Replace with your API domain
+        disallowedRoutes: [],
+      },
+    }),
+    MatCardModule,
+    MatButtonModule,
+    ScrollingModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

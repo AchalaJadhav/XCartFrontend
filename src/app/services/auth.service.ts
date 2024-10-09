@@ -1,8 +1,9 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, tap, throwError } from 'rxjs';
-import { Product } from '../product/product.model';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { Product } from '../product-detail/product.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +15,14 @@ export class AuthService {
   private cartUrl = 'http://localhost:8182/cart'; // Base URL for cart functionality
 
   constructor(private http: HttpClient,
-              private router: Router
+              private router: Router,
+              private jwtHelper: JwtHelperService
     ) {}
 
   // Method to handle signup
   signup(signupData: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/signup`, signupData);
   }
-
 
   // Method to handle login
   login(credentials: { username: string; password: string }): Observable<any> {
@@ -31,77 +32,82 @@ export class AuthService {
 
     return this.http.post(`${this.baseUrl}/login`, credentials, { headers }).pipe(
       tap((response: any) => {
-        // Assuming the JWT token is returned in the 'token' field of the response
         const token = response.token;  
         if (token) {
-          // Store the token in localStorage for future requests
-          localStorage.setItem('jwt', token);
+          localStorage.setItem('jwt', token); // Ensure to store with the same key
         }
       })
     );
-}
-
+  }
 
   // Get all products method
-  // getProducts(): Observable<Product[]> {
-  //   // Retrieve the token from localStorage
-  //   const token = localStorage.getItem('jwt');
-  
-  //   // Check if token exists, if not, handle it (e.g., redirect to login or throw an error)
-  //   if (!token) {
-  //     console.error('JWT token not found. Redirecting to login...');
-  //     // Handle appropriately; example: you can redirect or throw an error
-  //     this.router.navigate(['/login']); // Redirecting to login in case of missing token
-  //     return throwError('JWT token not found, please login.');
-  //   }
-  
-  //   // Add the token to the Authorization header
-  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  
-  //   // Log the token only for debugging purposes (optional)
-  //   console.log('JWT token:', token);
-  
-  //   // Perform the API call to get the products
-  //   return this.http.get<Product[]>(`${this.productsUrl}/getproducts`, { headers }).pipe(
-  //     catchError((error: HttpErrorResponse) => {
-  //       console.error('Error fetching products:', error);
-  //       return throwError('Failed to fetch products, please try again later.');
-  //     })
-  //   );
-  // }
-  
-  getProducts(): Observable<Product[]> {
-    // No token retrieval or Authorization header required here
-    
-    // Perform the API call to get the products
+  getAllProducts(): Observable<Product[]> {
+    // Fetch products with the correct URL and error handling
     return this.http.get<Product[]>(`${this.productsUrl}/getAllProducts`).pipe(
       catchError((error: HttpErrorResponse) => {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching products:', error.message);
         return throwError('Failed to fetch products, please try again later.');
       })
     );
   }
 
   // Method to handle add to cart
-  addToCart(userId: string, productId: string, quantity: number): Observable<any> {
-    const token = localStorage.getItem('jwt');
+  // Add this method in AuthService
+addToCart(userId: string, productId: string, quantity: number): Observable<any> {
+  const token = localStorage.getItem('jwt');
+
+  if (!token) {
+    console.error('JWT token not found. Redirecting to login...');
+    this.router.navigate(['/login']);
+    return throwError('JWT token not found, please login.');
+  }
+
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  const body = { userId, productId, quantity };
+
+  return this.http.post(`${this.cartUrl}/addToCart`, body, { headers }).pipe(
+    catchError((error: HttpErrorResponse) => {
+      console.error('Error adding to cart:', error);
+      return throwError('Failed to add to cart, please try again later.');
+    })
+  );
+}
+
   
-    if (!token) {
-      console.error('JWT token not found. Redirecting to login...');
-      this.router.navigate(['/login']);
-      return throwError('JWT token not found, please login.');
-    }
-  
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    const body = { userId, productId, quantity };
-  
-    return this.http.post(`${this.cartUrl}/addToCart`, body, { headers }).pipe(
+  // Fetch product by ID
+  getProductById(productId: string): Observable<Product> {
+    // Send productId as a parameter in the URL
+    const url = `${this.productsUrl}/getProduct?productId=${productId}`;
+
+    return this.http.get<Product>(url).pipe(
       catchError((error: HttpErrorResponse) => {
-        console.error('Error adding to cart:', error);
-        return throwError('Failed to add to cart, please try again later.');
+        console.error('Error fetching product by ID:', error);
+        return throwError('Failed to fetch product details, please try again later.');
       })
     );
   }
   
-  
+  logout(): void {
+    localStorage.removeItem('jwt'); // Remove the JWT token
+  }
+
+  getUserName(): string | null {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      const decodedToken = JSON.parse(atob(token.split('.')[1])); // Decode the token
+      return decodedToken.username; // Adjust this based on your token structure
+    }
+    return null;
+  }
+
+  // Method to get user ID from token
+  getUserId(): string | null {
+    const token = localStorage.getItem('jwt'); 
+    if (token && !this.jwtHelper.isTokenExpired(token)) {
+        const decodedToken = this.jwtHelper.decodeToken(token);
+        console.log('Decoded Token:', decodedToken); // Debug log
+        return decodedToken.userId || null; 
+    }
+    return null;
+  }
 }

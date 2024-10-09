@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../services/auth.service';
@@ -10,7 +10,6 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-
   loginForm: FormGroup;
   loading = false;
 
@@ -22,7 +21,7 @@ export class LoginComponent implements OnInit {
   ) {
     // Initialize the login form
     this.loginForm = this.formBuilder.group({
-      username: ['', [Validators.required, Validators.email]], // Add validators
+      username: ['', [Validators.required]], // Adjusted for username input
       password: ['', [Validators.required]],
     });
   }
@@ -44,8 +43,19 @@ export class LoginComponent implements OnInit {
     this.authService.login({ username, password }).subscribe({
       next: (response) => {
         this.loading = false; // Hide loading spinner
-        // Handle successful login
-        this.router.navigate(['/home']); // Adjust the route accordingly
+
+        // Save JWT token to local storage
+        localStorage.setItem('jwt', response.token); // Adjust based on your API response structure
+        // Store the token in local storage
+        const token = response.token;
+        if (token) {
+            localStorage.setItem('jwt', token);
+        }
+        // Show success message
+        this.toastr.success('Login successful', 'Success');
+
+        // Navigate to home page after successful login
+        this.router.navigate(['/home']);
       },
       error: (error) => {
         this.loading = false;

@@ -1,9 +1,24 @@
-<div class="product-container" *ngIf="!loading; else loadingSpinner">
-  <app-product *ngFor="let product of products" [product]="product"></app-product>
+<div *ngIf="loading">Loading products...</div>
+<div *ngIf="!loading && products.length > 0">
+  <div class="product-grid">
+    <div *ngFor="let product of products" class="product-card">
+      <mat-card class="example-card" appearance="outlined" (click)="productClick(product.id, product.productName)">
+        <mat-card-header>
+          <div mat-card-avatar style="background-size: cover; width: min-content; height: min-content;">
+            <img [src]="product.imagePath" alt="{{ product.productName }}">
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-card-title>{{ product.productName }}</mat-card-title>
+          <mat-card-subtitle>₹{{ product.price }}</mat-card-subtitle>
+          <mat-card-subtitle style="color: green;">{{ product.productDiscount }}% off</mat-card-subtitle>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>  
 </div>
 
-<ng-template #loadingSpinner>
-  <div class="spinner">
-    <p>Loading products...</p>
-  </div>
-</ng-template>
+
+<div *ngIf="!loading && products.length === 0">
+  No products available.
+</div>

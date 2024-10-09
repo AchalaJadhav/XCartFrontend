@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from '../product/product.model';
 import { AuthService } from '../services/auth.service';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
+import { Product } from '../product-detail/product.model';
 
 @Component({
   selector: 'app-home',
@@ -12,22 +13,43 @@ export class HomeComponent implements OnInit {
 
   products: Product[] = []; // Array to hold products
   loading: boolean = true; // Loading state
+  imageBasePath = environment.imageBasePath;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.authService.getProducts().subscribe({
+    this.loadProducts();
+  }
+
+  loadProducts(): void {
+    this.authService.getAllProducts().subscribe({
       next: (data: Product[]) => {
-        // Assuming data has the path as a relative URL
         this.products = data.map(product => ({
-          ...product,
-          fullImagePath: environment.imageBasePath + product.path // Combine base path with image path
+          ...product, // Spread the existing product properties
+          imagePath: `${this.imageBasePath}${product.path}` // Construct the image path for each product
         }));
         this.loading = false;
       },
-      error: (error) => {
-        console.error('Error fetching products:', error);
+      error: (err) => {
+        console.error('Error loading products:', err);
         this.loading = false;
+      }
+    });
+  }
+
+  productClick(productId: string, productName: string){
+    this.authService.getProductById(productId).subscribe({
+      next: (product: Product) => {
+        console.log('Product details:', product);
+        // Navigate to the product detail page
+        const newUrl = this.router.serializeUrl(
+          this.router.createUrlTree(['/product', productId], { queryParams: { name: productName } })
+        );
+        
+        window.open(newUrl, '_blank');
+      },
+      error: (err) => {
+        console.error('Error fetching product:', err);
       }
     });
   }

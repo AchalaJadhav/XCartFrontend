@@ -1,12 +1,27 @@
-<!--Show following div if User is logged in -->
 <nav class="navbar navbar-expand-lg bg-dark">
   <a id="home" class="navbar-brand" [routerLink]="['/home']">
     <img src="../../assets/Icons/X.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
-      CART
-  </a>    
+    CART
+  </a>
+  <div class="collapse navbar-collapse">
+    <div class="ml-auto"> <!-- This will push the content to the right -->
+      <div class="nav-item">
+        <button class="btn btn-outline-success" 
+                type="button" 
+                *ngIf="!isLoggedIn" 
+                (click)="login()">
+          Login
+        </button>
     
-  <div class="nav-item">
-    <button class="btn btn-outline-success" type="button" [routerLink]="['/login']">Login</button>
+        <button class="btn btn-outline-danger" 
+                type="button" 
+                *ngIf="isLoggedIn" 
+                (mouseover)="userName"
+                (click)="logout()">
+          Logout
+          <span *ngIf="userName" class="user-name" title="{{ userName }}">{{ userName }}</span>
+        </button>
+      </div>
+    </div>
   </div>
-    
 </nav>

@@ -1,0 +1,33 @@
+<div *ngIf="loading; else productDetails">
+  <p>Loading product details...</p>
+</div>
+
+<ng-template #productDetails>
+  <div class="left-image-vew">
+    <img [src]="product.imagePath" alt="{{ product.productName }}">
+  </div>
+  <div class="right-info-vew">
+    <h4>{{ product.productName }}</h4>
+    <div class="rating-star">
+      <p style="display: inline; color: white;">4.4 
+        <mat-icon style="vertical-align: middle; font-size: larger; color: white;">star</mat-icon>
+      </p> 
+    </div>
+    <p style="display: inline; margin-left: 2%; color: gray; font-weight: 600;">262 Ratings & 214 Reviews</p>
+    
+    <p class="special-price">Special Price</p>
+    <p class="product-price">
+      ₹{{ product.price }} 
+      <span class="original-price">₹{{ getOriginalPrice(product) | number : '1.0-2' }}</span> 
+      <span class="product-discount">{{ product.productDiscount }}% off</span>
+    </p>
+    
+    <p style="margin-bottom: 0%;">{{product.tagLine}}</p>
+    <p style="margin-top: 0%;">{{ product.productShortDescription }}</p> <!-- Removed optional chaining -->
+    
+    <button (click)="addToCart()" class="add-to-cart">
+      <mat-icon>shopping_cart</mat-icon>Add to Cart</button>
+    <button (click)="buyNow()" class="buy-now">
+      <mat-icon>credit_card</mat-icon>Buy Now</button>
+  </div>
+</ng-template>

@@ -1,49 +1,45 @@
-
-
-
 <div class="container-fluid bg">
     <div class="row">
         
         <div class="col-md-4 col-sm-4 col-xs-12"></div>
         
         <div class="col-md-4 col-sm-4 col-xs-12">
-            <div style="text-align: center"><img style="width: 187px" class="img-responsive"  src="../../assets/Icons/X.jpg"></div>
-
-            <div class="login-container">
-            <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-                <h2>Welcome to XCart!</h2>
-
-                <div>
-                <label for="username">Username</label>
-                <input id="username" formControlName="username" required />
-                <div *ngIf="loginForm.get('username')?.invalid && (loginForm.get('username')?.touched || loginForm.get('username')?.dirty)">
-                    <small *ngIf="loginForm.get('username')?.errors?.['required']">Username is required.</small>
-                    <small *ngIf="loginForm.get('username')?.errors?.['email']">Please enter a valid email.</small>
-                </div>
-                </div>
-
-                <div>
-                <label for="password">Password</label>
-                <input id="password" type="password" formControlName="password" required />
-                <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)">
-                    <small *ngIf="loginForm.get('password')?.errors?.['required']">Password is required.</small>
-                </div>
-                </div>
-
-                <button type="submit" [disabled]="loading">
-                <div *ngIf="loading" class="spinner"></div>
-                Login
-                </button>
-
-                <div class="signup-link">
-                <p>Don't have an account? <a routerLink="/signup">Sign Up</a></p>
-                </div>
-            </form>
+            <div style="text-align: center">
+                <img style="width: 187px" class="img-responsive" src="../../assets/Icons/X.jpg">
             </div>
 
+            <div class="login-container">
+                <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+                    <h2>Welcome to XCart!</h2>
 
+                    <div>
+                        <label for="username">Username</label>
+                        <input id="username" formControlName="username" required />
+                        <div *ngIf="loginForm.get('username')?.invalid && (loginForm.get('username')?.touched || loginForm.get('username')?.dirty)">
+                            <small *ngIf="loginForm.get('username')?.errors?.['required']">Username is required.</small>
+                            <small *ngIf="loginForm.get('username')?.errors?.['email']">Please enter a valid email.</small>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="password">Password</label>
+                        <input id="password" type="password" formControlName="password" required />
+                        <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)">
+                            <small *ngIf="loginForm.get('password')?.errors?.['required']">Password is required.</small>
+                        </div>
+                    </div>
+
+                    <button type="submit" [disabled]="loading">
+                        <div *ngIf="loading" class="spinner"></div>
+                        Login
+                    </button>
+
+                    <div class="signup-link">
+                        <p>Don't have an account? <a routerLink="/signup">Sign Up</a></p>
+                    </div>
+                </form>
+            </div>
         </div>
     
     </div>
 </div>
-
