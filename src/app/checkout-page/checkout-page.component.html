@@ -1,0 +1,81 @@
+<div class="navigation-path">
+  <p [routerLink]="['/home']">Home </p>
+  <p [routerLink]="['/cart']">/ Cart </p>
+  <p style="color: black;">/ Checkout</p>
+</div>
+
+<div class="cart-container">
+  <div class="left-side-cart">
+    <mat-stepper linear #stepper>
+      <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
+        <form [formGroup]="firstFormGroup">
+          <ng-template matStepLabel>Select a delivery address</ng-template>
+          <mat-card appearance="outlined">
+            <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" formControlName="favoriteSeason">
+              <div *ngFor="let season of seasons">
+                <mat-radio-button class="example-radio-button" [value]="season">
+                  {{ season }}
+                </mat-radio-button>
+              </div>
+            </mat-radio-group>
+            <!-- <div>Your favorite season is: {{ firstFormGroup.get('favoriteSeason')?.value }}</div> -->
+          </mat-card>
+          <div>
+            <button mat-button matStepperNext>Use this address</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
+        <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Payment Method</ng-template>
+          <mat-form-field>
+            <mat-label>Address</mat-label>
+            <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY"
+                   required>
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Done</ng-template>
+        <p>You are now done.</p>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button (click)="stepper.reset()">Reset</button>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </div>
+  
+  <div class="right-side-cart">
+    <h4>Price Details</h4>
+    <hr class="custom-hr" />
+  
+    <div class="price-details">
+      <div class="row">
+        <span class="key">Price ({{ totalItems }} {{ totalItems === 1 ? 'item' : 'items' }})</span>
+        <span class="value" style="color: black;">₹{{ price | number: '1.0-2' }}</span>
+      </div>
+      <div class="row">
+        <span class="key">Discount</span>
+        <span class="value">- ₹{{ discount | number: '1.0-2' }}</span>
+      </div>
+      <div class="row">
+        <span class="key">Delivery Charges</span>
+        <span class="value">{{ deliveryCharges > 0 ? '₹' + deliveryCharges : 'Free' }}</span>
+      </div>
+      <hr class="dotted-hr" />
+      <div class="row total">
+        <span class="key">Total Amount</span>
+        <span class="value">₹{{ totalAmount | number: '1.0-2' }}</span>
+      </div>
+      <hr class="dotted-hr" />
+    </div>
+    <div class="savings-message" *ngIf="discount > 0">
+      You will save <strong>₹{{ discount | number : '1.0-2' }}</strong> on this order
+    </div>
+  </div>
+</div>  

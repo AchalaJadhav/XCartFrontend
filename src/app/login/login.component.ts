@@ -50,12 +50,20 @@ export class LoginComponent implements OnInit {
         const token = response.token;
         if (token) {
             localStorage.setItem('jwt', token);
+            this.authService.setLoggedIn(); // Set the user as logged in
         }
         // Show success message
         this.toastr.success('Login successful', 'Success');
 
-        // Navigate to home page after successful login
-        this.router.navigate(['/home']);
+        const redirectPath = localStorage.getItem('redirectPath');
+        if (redirectPath) {
+            const { path, productId } = JSON.parse(redirectPath);
+            this.router.navigate([path, productId]);
+            localStorage.removeItem('redirectPath'); // Clear stored path
+        } else {
+            // Navigate to home page after successful login
+            this.router.navigate(['/home']);
+        }
       },
       error: (error) => {
         this.loading = false;

@@ -5,7 +5,8 @@
   </a>
   <div class="collapse navbar-collapse">
     <div class="ml-auto"> <!-- This will push the content to the right -->
-      <div class="nav-item">
+      <mat-icon class="add-to-cart" [routerLink]="['/cart']">shopping_cart</mat-icon>
+      <div class="nav-item login-button">
         <button class="btn btn-outline-success" 
                 type="button" 
                 *ngIf="!isLoggedIn" 

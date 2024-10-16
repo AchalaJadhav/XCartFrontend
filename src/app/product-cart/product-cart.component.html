@@ -1,1 +1,68 @@
-<p>product-cart works!</p>
+<div *ngIf="cartItems.length > 0; else noItems" class="cart-container">
+  <div class="left-side-cart" *ngFor="let item of cartItems">
+    <div class="product-items">
+      <div class="img-container">
+        <img [src]="item.imagePath" alt="{{ item.productName }}" class="product-image"
+        (click)="productClick(item.id, item.productName)"/>
+      </div>
+      
+      <div class="product-content">
+        <h6 (click)="productClick(item.id, item.productName)">{{ item.productName }}</h6>
+        <p class="tag-line">{{item.tagLine}}</p>
+        <p class="seller">Seller: OnestoLabs</p>
+        <p class="product-price">
+          <span class="original-price">₹{{ getOriginalPrice(item) | number : '1.0-2' }}</span> 
+          ₹{{ item.price }} 
+          <span class="product-discount">{{ item.productDiscount }}% off</span>
+        </p>
+        <div class="quantity-container">
+          <button class="decrement-btn" (click)="decreaseQuantity(item.id)"  
+          [disabled]="item.quantity <= 1">-</button>
+          <span class="quantity">{{ item.quantity }}</span>
+          <button class="increment-btn" (click)="increaseQuantity(item.id)">+</button>
+          <button class="save-for-later">Save for later</button>
+          <button class="remove-item" (click)="removeProductFromCart(item.id)">Remove</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="right-side-cart">
+    <h4>Price Details</h4>
+    <hr class="custom-hr" />
+  
+    <div class="price-details">
+      <div class="row">
+        <span class="key">Price ({{ totalItems }} {{ totalItems === 1 ? 'item' : 'items' }})</span>
+        <span class="value" style="color: black;">₹{{ price | number: '1.0-2' }}</span>
+      </div>
+      <div class="row">
+        <span class="key">Discount</span>
+        <span class="value">- ₹{{ discount | number: '1.0-2' }}</span>
+      </div>
+      <div class="row">
+        <span class="key">Delivery Charges</span>
+        <span class="value">{{ deliveryCharges > 0 ? '₹' + deliveryCharges : 'Free' }}</span>
+      </div>
+      <hr class="dotted-hr" />
+      <div class="row total">
+        <span class="key">Total Amount</span>
+        <span class="value">₹{{ totalAmount | number: '1.0-2' }}</span>
+      </div>
+      <hr class="dotted-hr" />
+    </div>
+    <div class="savings-message" *ngIf="discount > 0">
+      You will save <strong>₹{{ discount | number : '1.0-2' }}</strong> on this order
+    </div>
+    <button class="place-order" (click)="goToCheckout()">Place Order</button>
+  </div>
+</div>
+
+<ng-template #noItems>
+  <div class="empty-cart">
+    <img src="assets/images/other/shopping-cart.webp" alt="Empty Cart">
+    <h2>Your cart is empty!</h2>
+    <h6>Add items to cart now?</h6>
+    <button class="got-to-shop" [routerLink]="['/home']">Shop Now</button>
+  </div>
+</ng-template>

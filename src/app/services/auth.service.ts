@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Product } from '../product-detail/product.model';
@@ -13,6 +13,8 @@ export class AuthService {
   private baseUrl = 'http://localhost:8182/auth';  // Base URL for your authentication API
   private productsUrl = 'http://localhost:8182/product'; // Base URL for getting products
   private cartUrl = 'http://localhost:8182/cart'; // Base URL for cart functionality
+  private loggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
+  isLoggedIn$ = this.loggedInSubject.asObservable();
 
   constructor(private http: HttpClient,
               private router: Router,
@@ -88,7 +90,18 @@ addToCart(userId: string, productId: string, quantity: number): Observable<any> 
   }
   
   logout(): void {
-    localStorage.removeItem('jwt'); // Remove the JWT token
+    localStorage.removeItem('jwt'); // Remove token
+    this.loggedInSubject.next(false); // Update logged in state
+  }
+
+
+  hasToken(): boolean {
+    return !!localStorage.getItem('jwt'); // Check if token exists
+  }
+
+  // Call this method after successful login
+  setLoggedIn() {
+    this.loggedInSubject.next(true);
   }
 
   getUserName(): string | null {
@@ -109,5 +122,100 @@ addToCart(userId: string, productId: string, quantity: number): Observable<any> 
         return decodedToken.userId || null; 
     }
     return null;
+  }
+
+  getCart(userId: string): Observable<any> {
+    const token = localStorage.getItem('jwt');
+
+    if (!token) {
+        console.error('JWT token not found. Redirecting to login...');
+        this.router.navigate(['/login']);
+        return throwError('JWT token not found, please login.');
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const url = `${this.cartUrl}/getCart?userId=${userId}`; // Append parameters to the URL
+
+    return this.http.get(url, { headers }).pipe(
+        catchError((error: HttpErrorResponse) => {
+            console.error('Error fetching cart:', error);
+            return throwError('Failed to fetch cart, please try again later.');
+        })
+    );
+  }
+
+  // Increase product by ID in cart
+  increaseProductById(userId: string, productId: string): Observable<any> {
+    const token = localStorage.getItem('jwt');
+  
+    if (!token) {
+      console.error('JWT token not found. Redirecting to login...');
+      this.router.navigate(['/login']);
+      return throwError('JWT token not found, please login.');
+    }
+  
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Ensure your token is included
+      'Content-Type': 'application/json'
+    });
+    const body = { userId, productId };
+    console.log("From Auth: " + userId, productId);
+  
+    return this.http.post(`${this.cartUrl}/increaseProductCount`, body, { headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error adding to cart:', error);
+        return throwError('Failed to add to cart, please try again later.');
+      })
+    );
+  }
+
+  // Decrease product by ID in cart
+  decreaseProductById(userId: string, productId: string): Observable<any> {
+    const token = localStorage.getItem('jwt');
+  
+    if (!token) {
+      console.error('JWT token not found. Redirecting to login...');
+      this.router.navigate(['/login']);
+      return throwError('JWT token not found, please login.');
+    }
+  
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Ensure your token is included
+      'Content-Type': 'application/json'
+    });
+    const body = { userId, productId };
+    console.log("From Auth: " + userId, productId);
+  
+    return this.http.post(`${this.cartUrl}/decreaseProductCount`, body, { headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error adding to cart:', error);
+        return throwError('Failed to add to cart, please try again later.');
+      })
+    );
+  }
+
+  // Remove product by ID in cart
+  removeProductById(userId: string, productId: string): Observable<any> {
+    const token = localStorage.getItem('jwt');
+  
+    if (!token) {
+      console.error('JWT token not found. Redirecting to login...');
+      this.router.navigate(['/login']);
+      return throwError('JWT token not found, please login.');
+    }
+  
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Ensure your token is included
+      'Content-Type': 'application/json'
+    });
+    const body = { userId, productId };
+    // console.log("From Auth: " + userId, productId);
+  
+    return this.http.post(`${this.cartUrl}/removeFromCart`, body, { headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error adding to cart:', error);
+        return throwError('Failed to add to cart, please try again later.');
+      })
+    );
   }
 }

@@ -27,3 +27,19 @@ body {
   font-weight: normal;
   color: white;
 }
+
+.add-to-cart{
+  display: inline-block;
+  vertical-align: middle;
+  color: white;
+  cursor: pointer;
+  transform: translateX(-20px);
+}
+
+.add-to-cart:hover{
+  color: #cad7e9;
+}
+
+.login-button{
+  display: inline-block;
+}

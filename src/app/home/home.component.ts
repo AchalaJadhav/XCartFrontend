@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { environment } from 'src/environments/environment';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../product-detail/product.model';
 
 @Component({
@@ -14,11 +14,21 @@ export class HomeComponent implements OnInit {
   products: Product[] = []; // Array to hold products
   loading: boolean = true; // Loading state
   imageBasePath = environment.imageBasePath;
+  isLoggedIn: boolean = false; // Track login status
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.loadProducts();
+    //To change the tab name
+    this.route.queryParamMap.subscribe(params => {
+      // Set the tab title to the shopping page name
+        document.title = "XCart";
+    });
+
+    this.authService.isLoggedIn$.subscribe(loggedIn => {
+      this.isLoggedIn = loggedIn; // Update the local state based on the observable
+    });
   }
 
   loadProducts(): void {

@@ -53,14 +53,15 @@ export class ProductDetailComponent implements OnInit { // Implement OnInit
   }
 
   addToCart(): void {
-    const userId = this.authService.getUserId(); // Get user ID dynamically
+    const userId = this.authService.getUserId() || ''; // Get user ID dynamically
     console.log('Retrieved User ID:', userId); // Debug log
     const productId = this.product.id; // Get product ID
     const quantity = 1; // You can change this based on your input
 
     if (!userId) {
         console.error('User ID not found. Please log in.');
-        return; // Handle the case where the user is not logged in
+        localStorage.setItem('redirectPath', JSON.stringify({ path: '/cart', productId })); // Store path
+        this.router.navigate(['/login']); // Handle the case where the user is not logged in
     }
 
     this.loading = true; // Optional: set loading state
@@ -71,14 +72,14 @@ export class ProductDetailComponent implements OnInit { // Implement OnInit
             this.loading = false; // Reset loading state
             
             // Redirect to ProductCartComponent
-            this.router.navigate(['/cart']); // Ensure '/cart' matches your routing setup
+            this.router.navigate(['/cart', productId]); // Ensure '/cart' matches your routing setup
         },
         error: (error) => {
             console.error('Error adding product to cart:', error);
             this.loading = false; // Reset loading state
         }
     });
-}
+  }
 
 
   buyNow(): void { // Specify the return type

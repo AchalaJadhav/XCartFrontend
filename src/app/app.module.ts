@@ -21,6 +21,12 @@ import {MatButtonModule} from '@angular/material/button';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatIconModule} from '@angular/material/icon';
 import { ProductCartComponent } from './product-cart/product-cart.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { CheckoutPageComponent } from './checkout-page/checkout-page.component';
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatRadioModule} from '@angular/material/radio';
 
 export function tokenGetter() {
   return localStorage.getItem('token'); // Adjust this if you're using a different storage method
@@ -36,7 +42,8 @@ export function tokenGetter() {
     SignUpComponent,
     SpinnerComponent,
     ProductDetailComponent,
-    ProductCartComponent
+    ProductCartComponent,
+    CheckoutPageComponent
   ],
   imports: [
     BrowserModule,
@@ -57,6 +64,11 @@ export function tokenGetter() {
     MatButtonModule,
     ScrollingModule,
     MatIconModule,
+    MatSnackBarModule,
+    MatStepperModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatRadioModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
