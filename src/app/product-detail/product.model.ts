@@ -4,7 +4,7 @@ export interface Product {
     description: string;          // Description of the product
     price: number;                // Price of the product
     productDiscount: number;      // Discount percentage on the product
-    path: string;                 // Path for the product image (relative path)
+    productImagePath: string;                 // Path for the product image (relative path)
     imagePath?: string;           // Full image path (absolute path, optional)
     category: string;             // Category the product belongs to
     stock: number;                // Available stock for the product

@@ -10,18 +10,28 @@
       <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
         <form [formGroup]="firstFormGroup">
           <ng-template matStepLabel>Select a delivery address</ng-template>
-          <mat-card appearance="outlined">
-            <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" formControlName="favoriteSeason">
-              <div *ngFor="let season of seasons">
-                <mat-radio-button class="example-radio-button" [value]="season">
-                  {{ season }}
+          <mat-card appearance="outlined" class="address-card">
+            <p>Your addresses</p>
+            <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" formControlName="address">
+              <div *ngFor="let address of addedAddresses">
+                <mat-radio-button class="example-radio-button" [value]="address">
+                  <div class="address-line-radio">
+                    <p>FirstName LastName{{userName}}</p>
+                    {{ address.houseDetails }},
+                    {{ address.addressLine }},
+                    {{ address.city }},
+                    {{ address.state }},
+                    {{ address.pincode }},
+                    {{ address.country }}.
+                  </div>
                 </mat-radio-button>
               </div>
             </mat-radio-group>
+            <button class="add-address" (click)="openDialog('0ms', '0ms')"><mat-icon>add</mat-icon>Add a new address</button>
             <!-- <div>Your favorite season is: {{ firstFormGroup.get('favoriteSeason')?.value }}</div> -->
           </mat-card>
           <div>
-            <button mat-button matStepperNext>Use this address</button>
+            <button mat-button matStepperNext class="use-this-address">Use this address</button>
           </div>
         </form>
       </mat-step>
@@ -50,7 +60,7 @@
     </mat-stepper>
   </div>
   
-  <div class="right-side-cart">
+  <!-- <div class="right-side-cart">
     <h4>Price Details</h4>
     <hr class="custom-hr" />
   
@@ -77,5 +87,5 @@
     <div class="savings-message" *ngIf="discount > 0">
       You will save <strong>₹{{ discount | number : '1.0-2' }}</strong> on this order
     </div>
-  </div>
+  </div> -->
 </div>  

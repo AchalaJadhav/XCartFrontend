@@ -27,6 +27,9 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatRadioModule} from '@angular/material/radio';
+import {MatDialogModule} from '@angular/material/dialog';
+import { AddressDialogComponent } from './checkout-page/address-dialog/address-dialog.component';
+import {MatSelectModule} from '@angular/material/select';
 
 export function tokenGetter() {
   return localStorage.getItem('token'); // Adjust this if you're using a different storage method
@@ -43,7 +46,8 @@ export function tokenGetter() {
     SpinnerComponent,
     ProductDetailComponent,
     ProductCartComponent,
-    CheckoutPageComponent
+    CheckoutPageComponent,
+    AddressDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,6 +73,8 @@ export function tokenGetter() {
     MatInputModule,
     MatFormFieldModule,
     MatRadioModule,
+    MatDialogModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

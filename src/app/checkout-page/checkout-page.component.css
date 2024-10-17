@@ -24,6 +24,47 @@
     padding: 2%;
 }
 
+.address-card{
+    padding: 10px;
+}
+
+.add-address{
+    width: 28%;
+    vertical-align: middle;
+    border: none;
+    cursor: pointer;
+    color: #555;
+    margin-top: 2%;
+}
+
+.add-address mat-icon{
+    vertical-align: middle;
+    margin-right: 2%;
+}
+
+.add-address:hover{
+    color: #4caf50;
+}
+
+.address-line-radio{
+    text-transform: capitalize;
+    display: inline;
+    vertical-align: bottom;
+}
+
+.address-line-radio p{
+    font-weight: bold;
+    padding: 0%;
+    margin-top: 2%;
+    margin-bottom: 0;
+}
+
+.use-this-address{
+    margin-top: 2%;
+    background-color: #eb572e;
+    color: #fff !important;
+}
+
 .right-side-cart{
     display: block;
     position: fixed;

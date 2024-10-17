@@ -1,0 +1,86 @@
+<h2 mat-dialog-title>Enter your address details</h2>
+<mat-dialog-content>      
+    <mat-stepper linear #stepper>
+        <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
+          <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Country</ng-template>
+            <mat-form-field>
+              <mat-label>Country</mat-label>
+              <mat-select formControlName="country" (selectionChange)="onSelect('country', $event.value)">
+                <mat-option *ngFor="let country of countries" [value]="country">
+                  {{ country }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-button matStepperNext [disabled]="firstFormGroup.invalid">Next</button>
+          </form>
+        </mat-step>
+      
+        <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
+          <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>State</ng-template>
+            <mat-form-field>
+              <mat-label>State</mat-label>
+              <mat-select formControlName="state" (selectionChange)="onSelect('state', $event.value)" [disabled]="!selectedCountry">
+                <mat-option *ngFor="let state of states" [value]="state">
+                  {{ state }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-button matStepperPrevious>Back</button> <!-- Back Button -->
+            <button mat-button matStepperNext [disabled]="secondFormGroup.invalid || !selectedCountry">Next</button>
+          </form>
+        </mat-step>
+      
+        <mat-step [stepControl]="thirdFormGroup" [editable]="isEditable" *ngIf="selectedState">
+          <form [formGroup]="thirdFormGroup">
+            <ng-template matStepLabel>City</ng-template>
+            <mat-form-field>
+              <mat-label>City</mat-label>
+              <mat-select formControlName="city" (selectionChange)="onSelect('city', $event.value)" [disabled]="!selectedState">
+                <mat-option *ngFor="let city of cities" [value]="city">
+                  {{ city }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-button matStepperPrevious>Back</button> <!-- Back Button -->
+            <button mat-button matStepperNext [disabled]="thirdFormGroup.invalid || !selectedState">Next</button>
+          </form>
+        </mat-step>
+      
+        <!-- <mat-step [stepControl]="fourthFormGroup" [editable]="isEditable" *ngIf="selectedCity">
+          <form [formGroup]="fourthFormGroup">
+            <ng-template matStepLabel>Taluka</ng-template>
+            <mat-form-field>
+              <mat-label>Taluka</mat-label>
+              <mat-select formControlName="taluka" (selectionChange)="onSelect('taluka', $event.value)" [disabled]="!selectedCity">
+                <mat-option *ngFor="let taluka of talukas" [value]="taluka">
+                  {{ taluka }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext [disabled]="fourthFormGroup.invalid || !selectedCity">Next</button>
+          </form>
+        </mat-step> -->
+      
+        <mat-step [stepControl]="fourthFormGroup" [editable]="isEditable" *ngIf="selectedCity">
+          <form [formGroup]="fourthFormGroup">
+            <ng-template matStepLabel>Pincode</ng-template>
+            <mat-form-field>
+              <mat-label>Pincode</mat-label>
+              <mat-select formControlName="pincode" (selectionChange)="onSelect('taluka', $event.value)" [disabled]="!selectedCity">
+                <mat-option *ngFor="let pincode of pincodes" [value]="pincode">
+                  {{ pincode }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+          </form>
+        </mat-step>
+    </mat-stepper>      
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button mat-dialog-close cdkFocusInitial>Add Address</button>
+</mat-dialog-actions>

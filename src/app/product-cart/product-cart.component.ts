@@ -273,7 +273,8 @@ export class ProductCartComponent implements OnInit{
 
   goToCheckout(){
     // Pass user details and cart items to the checkout page
-    this.dataService.setCheckoutData({ userId: this.userId , cartItems: this.cartItems})
+    this.dataService.setCheckoutData({ userId: this.userId , cartItems: this.cartItems, totalAmount: this.totalAmount,
+      totalItems: this.totalItems, price: this.price, discount: this.discount, deliveryCharges: this.deliveryCharges})
     this.router.navigate(['/checkout']);
   }
 }

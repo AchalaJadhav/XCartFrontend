@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
       next: (data: Product[]) => {
         this.products = data.map(product => ({
           ...product, // Spread the existing product properties
-          imagePath: `${this.imageBasePath}${product.path}` // Construct the image path for each product
+          imagePath: `${this.imageBasePath}${product.productImagePath}` // Construct the image path for each product
         }));
         this.loading = false;
       },

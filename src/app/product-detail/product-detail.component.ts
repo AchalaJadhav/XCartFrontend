@@ -29,7 +29,7 @@ export class ProductDetailComponent implements OnInit { // Implement OnInit
       this.authService.getProductById(productId).subscribe({
         next: (data: Product) => {
           this.product = data; // Assign the fetched product data
-          this.product.imagePath = `${this.imageBasePath}${data.path}`;
+          this.product.imagePath = `${this.imageBasePath}${data.productImagePath}`;
           this.loading = false;
         },
         error: (error) => {
