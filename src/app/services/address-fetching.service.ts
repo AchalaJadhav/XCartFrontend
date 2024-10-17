@@ -19,7 +19,7 @@ export class AddressFetchingService {
   ) {}
 
   // Add user address while checkout
-  addUserAddress(userId: string, useraddress: string []): Observable<any> {
+  addUserAddress(userId: string, userAddresses: any[]): Observable<any> {
     const token = localStorage.getItem('jwt');
   
     if (!token) {
@@ -32,8 +32,8 @@ export class AddressFetchingService {
       'Authorization': `Bearer ${token}`, // Ensure your token is included
       'Content-Type': 'application/json'
     });
-    const body = { userId, useraddress};
-    // console.log("From Auth: " + userId, productId);
+    const body = { userId, userAddresses};
+    console.log("From Auth: " + userId, userAddresses);
   
     return this.http.post(`${this.userAddressUrl}/addUserAddress`, body, { headers }).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -188,6 +188,7 @@ export class AddressFetchingService {
       })
     );
   }
+
   deleteUserAddress(userId: string, addressId: string): Observable<any> {
     const token = localStorage.getItem('jwt');
   

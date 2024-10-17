@@ -48,22 +48,6 @@
           </form>
         </mat-step>
       
-        <!-- <mat-step [stepControl]="fourthFormGroup" [editable]="isEditable" *ngIf="selectedCity">
-          <form [formGroup]="fourthFormGroup">
-            <ng-template matStepLabel>Taluka</ng-template>
-            <mat-form-field>
-              <mat-label>Taluka</mat-label>
-              <mat-select formControlName="taluka" (selectionChange)="onSelect('taluka', $event.value)" [disabled]="!selectedCity">
-                <mat-option *ngFor="let taluka of talukas" [value]="taluka">
-                  {{ taluka }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext [disabled]="fourthFormGroup.invalid || !selectedCity">Next</button>
-          </form>
-        </mat-step> -->
-      
         <mat-step [stepControl]="fourthFormGroup" [editable]="isEditable" *ngIf="selectedCity">
           <form [formGroup]="fourthFormGroup">
             <ng-template matStepLabel>Pincode</ng-template>
@@ -75,12 +59,48 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <button mat-button (click)="stepper.reset()">Reset</button>
-          </form>
-        </mat-step>
-    </mat-stepper>      
+            <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext [disabled]="fourthFormGroup.invalid">Next</button>
+      </form>
+    </mat-step>
+
+    <!-- Step 5: Additional Address Details -->
+    <mat-step [stepControl]="fifthFormGroup" [editable]="isEditable">
+      <form [formGroup]="fifthFormGroup" class="steps-display">
+        <ng-template matStepLabel>Additional Details</ng-template>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Address Type</mat-label>
+          <input matInput formControlName="addressType" placeholder="e.g., Home or Office" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Primary Contact Number</mat-label>
+          <input matInput type="tel" formControlName="contactNumber1" placeholder="Enter primary contact number" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Secondary Contact Number</mat-label>
+          <input matInput type="tel" formControlName="contactNumber2" placeholder="Enter secondary contact number" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>House Details</mat-label>
+          <input matInput formControlName="houseDetails" placeholder="e.g., Flat number, building name" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Address Line</mat-label>
+          <input matInput formControlName="addressLine" placeholder="e.g., Street name, locality" required />
+        </mat-form-field>
+
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="onSubmit()" [disabled]="fifthFormGroup.invalid">Add Address</button>
+      </form>
+    </mat-step>
+  </mat-stepper>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button mat-dialog-close cdkFocusInitial>Add Address</button>
+  <!-- <button mat-button mat-dialog-close cdkFocusInitial>Add Address</button> -->
 </mat-dialog-actions>

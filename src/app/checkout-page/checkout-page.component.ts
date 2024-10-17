@@ -77,6 +77,7 @@ export class CheckoutPageComponent implements OnInit{
   });
   
   ngOnInit(): void {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.checkoutData = this.dataService.getCheckoutData();
     console.log('Checkout Data:', this.checkoutData);
 
@@ -133,32 +134,6 @@ export class CheckoutPageComponent implements OnInit{
 
     // Calculate total amount
     this.totalAmount = this.price - this.discount + this.deliveryCharges;
-  }
-
-  //add user address
-  addUserAddress(useraddress: string[]) {
-    const userId = this.authService.getUserId() || ''; // Provide a fallback value of an empty string
-  
-    this.addressService.addUserAddress(userId, useraddress).subscribe({
-      next: (response) => {
-        this.ngOnInit();
-        this._snackBar.open("Product removed", "Close", {
-          duration: 3000, // Duration in milliseconds (3000ms = 3 seconds)
-          panelClass: 'custom-snackbar', // Custom class for styling
-          verticalPosition: 'top', // Set the vertical position to top
-          horizontalPosition: 'right' // Optional: Set horizontal position
-        });
-      },
-      error: (err) => {
-        console.error('Error updating product:', err);
-        this._snackBar.open("Error updating product", "Close", {
-          duration: 3000,
-          panelClass: 'custom-snackbar',
-          verticalPosition: 'top',
-          horizontalPosition: 'right'
-        });
-      }
-    });
   }
 
   //open dialog to add user address form

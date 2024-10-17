@@ -53,12 +53,16 @@ export class AddressDialogComponent {
     });
 
     this.fourthFormGroup = this._formBuilder.group({
-      pincode: ['', Validators.required],
+      pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
     });
 
-    // this.fifthFormGroup = this._formBuilder.group({
-    //   pincode: ['', Validators.required],
-    // });
+    this.fifthFormGroup = this._formBuilder.group({
+      addressType: ['', Validators.required],
+      contactNumber1: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      contactNumber2: ['', [Validators.pattern('^[0-9]{10}$')]],
+      houseDetails: ['', Validators.required],
+      addressLine: ['', Validators.required],
+    });
 
 
     this.userId = this.authService.getUserId() || ''; 
@@ -123,81 +127,56 @@ export class AddressDialogComponent {
     });
   }
 
+  onSubmit(): void {
+    if (
+      this.firstFormGroup.valid &&
+      this.secondFormGroup.valid &&
+      this.thirdFormGroup.valid &&
+      this.fourthFormGroup.valid &&
+      this.fifthFormGroup.valid
+    ) {
+      const addressData = {
+        addresstype: this.fifthFormGroup.value.addressType,
+        contactNumber1: this.fifthFormGroup.value.contactNumber1,
+        contactNumber2: this.fifthFormGroup.value.contactNumber2,
+        houseDetails: this.fifthFormGroup.value.houseDetails,
+        addressLine: this.fifthFormGroup.value.addressLine,
+        pincode: this.fourthFormGroup.value.pincode,
+        city: this.thirdFormGroup.value.city,
+        state: this.secondFormGroup.value.state,
+        country: this.firstFormGroup.value.country,
+      };
 
-  // getStates(country: string) {
-  //   if (this.userId) { // Ensure userId is non-empty
-  //     this.addressService.getStates(country).subscribe({
-  //       next: (data) => {
-  //         this.dataService.setState(data); // Assuming data is an array of states
-  //       },
-  //       error: (error) => {
-  //         console.error('Error fetching states:', error);
-  //         this.toastr.error('Error fetching states: ', error);
-  //       }
-  //     });
-  //   } else {
-  //     console.error('User ID not found. Please log in.');
-  //     this.toastr.error('User ID not found. Please log in.');
-  //     this.router.navigate(['/login']); 
-  //   }
-  // }
+      // console.log('Address Data:', addressData);
+      // Handle form submission logic (e.g., send to backend)
 
-  // getCities(state: string) {
-  //   // Implement your logic to fetch cities based on the selected state
-  //   // Call the relevant service method to fetch cities
-  //   this.addressService.getCities(state).subscribe({
-  //     next: (data) => {
-  //       this.dataService.setCities(data); // Assuming data is an array of cities
-  //     },
-  //     error: (error) => {
-  //       console.error('Error fetching cities:', error);
-  //       this.toastr.error('Error fetching cities: ', error);
-  //     }
-  //   });
-  // }
+      const userId = this.authService.getUserId() || ''; // Provide a fallback value of an empty string
+      const userAddresses: [typeof addressData] = [addressData]; // Pass as array
 
-  // getTalukas(city: string) {
-  //   // Implement your logic to fetch talukas based on the selected city
-  //   this.addressService.getTalukas(city).subscribe({
-  //     next: (data) => {
-  //       this.dataService.setTalukas(data); // Assuming data is an array of talukas
-  //     },
-  //     error: (error) => {
-  //       console.error('Error fetching talukas:', error);
-  //       this.toastr.error('Error fetching talukas: ', error);
-  //     }
-  //   });
-  // }
-
-  // getPincodes(taluka: string) {
-  //   // Implement your logic to fetch pincodes based on the selected taluka
-  //   this.addressService.getPincodes(taluka).subscribe({
-  //     next: (data) => {
-  //       this.dataService.setPincode(data); // Assuming data is an array of pincodes
-  //     },
-  //     error: (error) => {
-  //       console.error('Error fetching pincodes:', error);
-  //       this.toastr.error('Error fetching pincodes: ', error);
-  //     }
-  //   });
-  // }
-
-  // getCountries() {      
-  //   if (this.userId) { // Ensure userId is non-empty
-  //     this.addressService.getCountries().subscribe({
-  //       next: (data) => {
-  //         this.selectedCountry = data; // Assuming data is an array of countries
-  //         this.dataService.setCountry(this.selectedCountry);
-  //       },
-  //       error: (error) => {
-  //         console.error('Error fetching countries:', error);
-  //         this.toastr.error('Error fetching countries: ', error);
-  //       }
-  //     });
-  //   } else {
-  //     console.error('User ID not found. Please log in.');
-  //     this.toastr.error('User ID not found. Please log in.'); 
-  //     this.router.navigate(['/login']); 
-  //   }
-  // }
+      this.addressService.addUserAddress(userId, userAddresses).subscribe({
+        next: (response) => {
+          // Close the dialog and navigate to /checkout with a reload
+          this.dialogRef.close();
+          this.router.navigate(['/checkout']).then(() => {
+            window.location.reload();  // Force reload
+          });
+          this._snackBar.open("Address added successfully", "Close", {
+            duration: 3000, // Duration in milliseconds (3000ms = 3 seconds)
+            panelClass: 'custom-snackbar', // Custom class for styling
+            verticalPosition: 'top', // Set the vertical position to top
+            horizontalPosition: 'right' // Optional: Set horizontal position
+          });
+        },
+        error: (err) => {
+          console.error('Error adding address:', err);
+          this._snackBar.open("Error adding address", "Close", {
+            duration: 3000,
+            panelClass: 'custom-snackbar',
+            verticalPosition: 'top',
+            horizontalPosition: 'right'
+          });
+        }
+      });
+    }
+  }
 }
